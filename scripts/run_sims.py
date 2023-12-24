@@ -39,30 +39,30 @@ max_depth_grid = [1, 2]
 sims_list = ["linear", "lss", "poly", "hierarchical_lss"]
 param_grids = {
     "linear": {
-        "heritability": [0.6, 0.8, 0.9],
-        "s": [2, 4, 6],
+        "heritability": [0.4],
+        "s": [6],
         "sigma": [0],
         "beta": [1]
     },
     "lss": {
-        "heritability": [0.6, 0.8, 0.9],
+        "heritability": [0.2, 0.4, 0.6],
         "m": [1, 3, 5],
-        "r": [1, 2, 4],
+        "r": [2, 4],
         "sigma": [0],
         "tau": [0],
         "beta": [1]
     },
     "poly": {
-        "heritability": [0.6, 0.8, 0.9],
-        "m": [1, 2, 3],
-        "r": [1, 2, 3],
+        "heritability": [0.2, 0.4, 0.6],
+        "m": [1, 2],
+        "r": [2, 3],
         "sigma": [0],
         "beta": [1]
     },
     "hierarchical_lss": {
-        "heritability": [0.6, 0.8, 0.9],
-        "m": [1, 3, 5],
-        "r": [1, 2, 4],
+        "heritability": [0.2, 0.4, 0.6],
+        "m": [3, 5],
+        "r": [2, 4],
         "sigma": [0],
         "beta": [1],
         "lss": [True]
@@ -75,7 +75,7 @@ true_y_model_dict = {
     "hierarchical_lss": hierarchical_poly
 }
 
-for sim in sims_list:
+for sim in ["linear"]:
     param_grid = param_grids[sim]
     param_combinations = list(ParameterGrid(param_grid))
     results_list = []
@@ -85,8 +85,9 @@ for sim in sims_list:
             if len(param_grid[k]) > 1:
                 results[k] = v
             results["vals"] = run_sim(n_rules_grid, max_depth_grid, make_model,
+                                      p=100,
                                       true_y_model=true_y_model_dict[sim],
                                       n_iter=50, **comb)
         results_list.append(results)
-    with open(f"../results/{sim}_sim_results.pkl", "wb") as file:
+    with open(f"results/high_dim_results_linear.pkl", "wb") as file:
         pickle.dump(results_list, file)

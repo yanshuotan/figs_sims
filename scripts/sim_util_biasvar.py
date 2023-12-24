@@ -41,6 +41,10 @@ def get_expected_mse(preds, y_test):
     return np.mean((preds - y_test) ** 2)
 
 
+def get_mse_sd(preds, y_test):
+    return np.std(np.mean((preds - y_test) ** 2, axis=1))
+
+
 def get_results(preds_dict_list, y_test):
     results_dict_list = []
     for preds_dict in preds_dict_list:
@@ -51,6 +55,7 @@ def get_results(preds_dict_list, y_test):
         results_dict["bias"] = get_bias(preds_dict["preds"], y_test)
         results_dict["variance"] = get_variance(preds_dict["preds"])
         results_dict["mse"] = get_expected_mse(preds_dict["preds"], y_test)
+        results_dict["mse_sd"] = get_mse_sd(preds_dict["preds"], y_test)
         results_dict_list.append(results_dict)
     results_df = pd.DataFrame(results_dict_list)
     return results_df
